@@ -1,56 +1,101 @@
 {
-    "name": "project-dev",
-    "dockerComposeFile": ["docker-compose.yml"],
-    "service": "vscode",
-    "runServices": ["vscode"],
-    "shutdownAction": "stopCompose",
-    "workspaceFolder": "/workspace",
-    "postCreateCommand": "",
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "james-yu.latex-workshop",
-                // Git
-                "eamodio.gitlens",
-                // Other helpers
-                "shardulm94.trailing-spaces",
-                "stkb.rewrap", // rewrap comments after n characters on one line
-                // Other
-                "vscode-icons-team.vscode-icons"
-            ],
-            "settings": {
-                // General settings
-                "files.eol": "\n",
-                // Latex settings
-                "latex-workshop.linting.chktex.enabled": true,
-                "latex-workshop.linting.chktex.exec.path": "chktex",
-                "latex-workshop.latex.clean.subfolder.enabled": true,
-                "latex-workshop.latex.autoClean.run": "onBuilt",
-                "editor.formatOnSave": true,
-                "files.associations": {
-                    "*.tex": "latex"
-                },
-                "latex-workshop.latexindent.path": "latexindent",
-                "latex-workshop.latexindent.args": [
-                    "-c",
-                    "%DIR%/",
-                    "%TMPFILE%",
-                    "-y=defaultIndent: '%INDENT%'"
-                ],
-                "[latex]": { "editor.defaultFormatter": "James-Yu.latex-workshop" },
-                "latex-workshop.latex.tools": [
-                    { "name": "latexmk_xelatex", "command": "latexmk",
-                    "args": ["-xelatex","-synctex=1","-interaction=nonstopmode","-file-line-error","%DOC%"] },
-                    { "name": "xelatex", "command": "xelatex",
-                    "args": ["-synctex=1","-interaction=nonstopmode","-file-line-error","%DOC%"] },
-                    { "name": "biber", "command": "biber", "args": ["%DOCFILE%"] }
-                ],
-                "latex-workshop.latex.recipes": [
-                    { "name": "latexmk (xelatex)", "tools": ["latexmk_xelatex"] },
-                    { "name": "xe -> biber -> xe -> xe", "tools": ["xelatex","biber","xelatex","xelatex"] }
-                ],
-                "latex-workshop.latex.recipe.default": "lastUsed"
-            }
-        }
+  "name": "project-dev",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "vscode",
+  "runServices": ["vscode"],
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/workspace",
+  "postCreateCommand": "",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "james-yu.latex-workshop",
+        // Git
+        "eamodio.gitlens",
+        // Other helpers
+        "shardulm94.trailing-spaces",
+        "stkb.rewrap", // rewrap comments after n characters on one line
+        // Other
+        "vscode-icons-team.vscode-icons"
+      ],
+      "settings": {
+        // General settings
+        "files.eol": "\n",
+        // Latex settings
+        // Compilar automáticamente al guardar y usar directorio de salida como "caché"
+        "latex-workshop.latex.autoBuild.run": "onSave",
+        "latex-workshop.latex.outDir": "%DIR%/build",
+        "latex-workshop.latexmk.useOutDir": true,
+        // Asegura refresco de visor tras la compilación y estabilidad al recargar el PDF
+        "latex-workshop.view.pdf.viewer": "tab",
+        "latex-workshop.synctex.afterBuild.enabled": true,
+        "latex-workshop.latex.watch.pdf.delay": 1200,
+        "latex-workshop.view.pdf.reload.transition": "none",
+        // En entornos con Docker/Windows, usa polling para detectar cambios del PDF
+        "latex-workshop.latex.watch.usePolling": true,
+        "latex-workshop.latex.watch.interval": 1000,
+        "latex-workshop.linting.chktex.enabled": true,
+        "latex-workshop.linting.chktex.exec.path": "chktex",
+        "latex-workshop.latex.clean.subfolder.enabled": true,
+        "latex-workshop.latex.autoClean.run": "onBuilt",
+        "editor.formatOnSave": true,
+        "files.associations": {
+          "*.tex": "latex"
+        },
+        "latex-workshop.latexindent.path": "latexindent",
+        "latex-workshop.latexindent.args": [
+          "-c",
+          "%DIR%/",
+          "%TMPFILE%",
+          "-y=defaultIndent: '%INDENT%'"
+        ],
+        "[latex]": { "editor.defaultFormatter": null },
+        "latex-workshop.latex.tools": [
+          {
+            "name": "latexmk_xelatex",
+            "command": "latexmk",
+            "args": [
+              "-xelatex",
+              "-outdir=build",
+              "-synctex=1",
+              "-interaction=nonstopmode",
+              "-file-line-error",
+              "%DOC%"
+            ]
+          },
+          {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+              "-output-directory=build",
+              "-synctex=1",
+              "-interaction=nonstopmode",
+              "-file-line-error",
+              "%DOC%"
+            ]
+          },
+          {
+            "name": "biber",
+            "command": "biber",
+            "args": [
+              "--input-directory",
+              "build",
+              "--output-directory",
+              "build",
+              "%DOCFILE%"
+            ]
+          }
+        ],
+        "latex-workshop.latex.recipes": [
+          { "name": "latexmk (xelatex)", "tools": ["latexmk_xelatex"] },
+          {
+            "name": "xe -> biber -> xe -> xe",
+            "tools": ["xelatex", "biber", "xelatex", "xelatex"]
+          }
+        ],
+        // Forzar receta por defecto con latexmk para un manejo robusto del outdir
+        "latex-workshop.latex.recipe.default": "latexmk (xelatex)"
+      }
     }
+  }
 }
