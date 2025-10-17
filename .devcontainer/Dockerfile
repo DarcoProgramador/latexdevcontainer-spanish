@@ -1,0 +1,1 @@
+FROM darcoprogramador/latexdevcontainer-spanish

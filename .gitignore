@@ -1,0 +1,75 @@
+# Archivos y carpetas generados por LaTeX
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.dvi
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.pdfsync
+*.ps
+*.run.xml
+*.snm
+*.synctex(busy)
+*.synctex.gz
+*.tdo
+*.thm
+*.toc
+*.vrb
+*.xdv
+*.acn
+*.acr
+*.alg
+*.xdy
+*.auxlock
+*.tmp
+*.bak
+*.backup
+*~
+.#*
+
+# Minted/Pygments
+_minted-*/
+
+# Externalización de TikZ
+*.md5
+**/*-figure*.pdf
+
+# Directorios de salida comunes
+/auto/
+/_build/
+/build/
+/out/
+/dist/
+/tmp/
+
+# Entornos y configuraciones de editores/IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+Icon?
+
+# Caché del Dev Container (si existiese)
+.devcontainer/.cache/
+
+# Opcional: ignora los PDFs generados por LaTeX
+# *.pdf
